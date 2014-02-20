@@ -1,3 +1,8 @@
+Version 0.2
+----------------------------------------------
+* Add GSSAPI support (taken from 'getmail')
+* As getmail is GPLv2, relicense accordingly.
+
 Version 0.1
 ----------------------------------------------
 * Added configuring sleep timers.

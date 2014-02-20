@@ -1,4 +1,4 @@
-Version 0.1
+Version 0.2
 
 Pronounced /'zɛfiːmæp/ or ZE-fee-map.
 
@@ -54,6 +54,9 @@ To install python-zephyr:
    where ~/.local is the directory containing the lib/ directory from step
    2. This should install python-zephyr.
 
+If you want to use Kerberos/GSSAPI support, you'll also need to install
+python-kerberos, which is in Ubuntu and Debian.
+
 INSTALLING ZEPHYMAP
 ================================================================================
 zephymap itself requires no special setup.
@@ -98,6 +101,10 @@ password: password1
 server: imap.baz.com
 username: username2
 ssl: true
+[Mailbox 3]
+server: imap.quux.com
+username: username3
+use_gssapi: True
 
 The [mailbox] section names (the string inside the []) should contain a short
 meaningful name for the mail server it defines. This will appear in the
@@ -120,10 +127,15 @@ server      The URI of the IMAP server (e.g., "imap.gmail.com" for Gmail and
 
 username    The username for the account on the indicated server.
 
-password    The password for the account on the indicated server. Leaving this
-            option out will cause zephymap to prompt you to input your password
-            at startup. This is the suggested behaviour for the security
+password    The password for the account on the indicated server. Leaving
+            this option unset and also not having use_gssapi set will
+            cause zephymap to prompt you to input your password at
+            startup. This is the suggested behaviour for the security
             concious.
+
+use_gssapi  If set, Zephymap will use GSSAPI to authenticate to the
+	    IMAP server instead of using a password. This requires you
+	    to have and maintain valid Kerberos tickets.
 
 interval    An interval value in seconds that indicates the time to wait between
             checking the mailbox for new messages. It cannot be set less than 10
@@ -155,4 +167,5 @@ regex       A boolean option that causes include and exclude to interpret their
             you are familiar with regular expressions. Note that the regex will
             automatically be case-insensitive
 
-Contact Patrick at zephymap@mit.edu or on (MIT) zephyr via the zephymap class.
+Contact Patrick at zephymap@mit.edu or Adam at glasgall@mit.edu or on
+(MIT) zephyr via the zephymap class.

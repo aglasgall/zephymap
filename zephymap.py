@@ -96,14 +96,19 @@ def load_config():
         
         logger.info("Parsing section %s." % section)
         kwargs = {}
-        kwargs['username'] = username = scp.get(section, "username")
         kwargs['server'] = server = scp.get(section, "server")
-        if scp.has_option(section, "password"):
-            password = scp.get(section, "password")
+        use_gssapi = False
+        kwargs['username'] = username = scp.get(section, "username")
+        if scp.has_option(section, 'use_gssapi') and scp.getboolean(section, 'use_gssapi'):
+            kwargs['use_gssapi'] = use_gssapi = True
+            kwargs['username'] = kwargs['password'] = None
         else:
-            password = getpass.getpass("Password for server %s, username %s: " % (server, username))
+            if scp.has_option(section, "password"):
+                password = scp.get(section, "password")
+            else:
+                password = getpass.getpass("Password for server %s, username %s: " % (server, username))
 
-        kwargs['password'] = password
+                kwargs['password'] = password
             
         # determine whether to use ssl; defaults to yes
     
@@ -152,8 +157,8 @@ def load_config():
         kwargs['exclude'] = exclude_re
 
         
-        logger.debug("Constructing handler for section %s: server %s, username %s, ssl %s, port %d, interval %d, is_regex %s, include_re %s, exclude_re %s."
-                     % (section, server, username, ssl, port, interval, is_regex, include_re, exclude_re))
+        logger.debug("Constructing handler for section %s: server %s, username %s, ssl %s, port %d, interval %d, is_regex %s, include_re %s, exclude_re %s, use_gssapi %s."
+                     % (section, server, username, ssl, port, interval, is_regex, include_re, exclude_re, use_gssapi))
         handlers[section] = EmailHandler(**kwargs)
         handlers[section].interval = interval
 
